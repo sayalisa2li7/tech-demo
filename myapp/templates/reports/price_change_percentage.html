@@ -14,10 +14,10 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in data %}
+            {% for item in data %}
             <tr>
-                <td>{{ row.ticker }}</td>
-                <td>{{ row.price_change_percentage }}%</td>
+                <td>{{ item.ticker }}</td>
+                <td>{{ item.price_change_percentage|floatformat:2 }}%</td>
             </tr>
             {% endfor %}
         </tbody>

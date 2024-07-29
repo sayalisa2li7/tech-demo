@@ -30,17 +30,28 @@ def daily_closing_price_report(request):
     ).order_by('date')
     return render(request, 'reports/daily_closing_price.html', {'data': data})
 
+from django.db.models import Subquery, OuterRef, FloatField, ExpressionWrapper
+
 def price_change_percentage_report(request):
+    # Subquery to get the first close price
+    first_close_subquery = StockPrice.objects.filter(
+        ticker=OuterRef('ticker')
+    ).order_by('date').values('close')[:1]
+
+    # Subquery to get the last close price
+    last_close_subquery = StockPrice.objects.filter(
+        ticker=OuterRef('ticker')
+    ).order_by('-date').values('close')[:1]
+
     data = StockPrice.objects.values('ticker').annotate(
-        first_date=Min('date'),
-        last_date=Max('date'),
-        first_close=Max('close', filter=F('date') == F('first_date')),
-        last_close=Max('close', filter=F('date') == F('last_date')),
+        first_close=Subquery(first_close_subquery, output_field=FloatField()),
+        last_close=Subquery(last_close_subquery, output_field=FloatField()),
         price_change_percentage=ExpressionWrapper(
             (F('last_close') - F('first_close')) / F('first_close') * 100,
             output_field=FloatField()
         )
     ).order_by('-price_change_percentage')
+
     return render(request, 'reports/price_change_percentage.html', {'data': data})
 
 
