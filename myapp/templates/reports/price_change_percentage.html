@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Price Change Percentage Report</title>
+</head>
+<body>
+    <h1>Price Change Percentage Report</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Ticker</th>
+                <th>Price Change Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row.ticker }}</td>
+                <td>{{ row.price_change_percentage }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

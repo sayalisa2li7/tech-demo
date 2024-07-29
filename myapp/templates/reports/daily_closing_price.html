@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Closing Price Report</title>
+</head>
+<body>
+    <h1>Daily Closing Price Report</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Ticker</th>
+                <th>Closing Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row.date }}</td>
+                <td>{{ row.ticker }}</td>
+                <td>{{ row.closing_price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

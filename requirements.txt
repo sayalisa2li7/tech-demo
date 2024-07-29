@@ -1,0 +1,15 @@
+Django
+mysqlclient
+requests
+pandas
+Django>=3.0,<4.0
+djangorestframework
+requests
+pandas
+celery
+django-celery-beat
+mysqlclient
+redis>=3.5
+gunicorn>=20.0.4
+django-extensions
+# flower
