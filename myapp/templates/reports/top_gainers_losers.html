@@ -1,39 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Top Gainers and Losers</title>
-</head>
-<body>
-    <h1>Top Gainers</h1>
-    <table border="1">
+<h1>Top Gainers</h1>
+<table>
+    <thead>
         <tr>
             <th>Date</th>
             <th>Ticker</th>
             <th>Price Change Percentage</th>
         </tr>
-        {% for gainer in top_gainers %}
+    </thead>
+    <tbody>
+        {% for entry in top_gainers %}
         <tr>
-            <td>{{ gainer.date }}</td>
-            <td>{{ gainer.ticker }}</td>
-            <td>{{ gainer.price_change_percentage }}%</td>
+            <td>{{ entry.date }}</td>
+            <td>{{ entry.ticker }}</td>
+            <td>{{ entry.price_change_percentage }}%</td>
         </tr>
         {% endfor %}
-    </table>
+    </tbody>
+</table>
 
-    <h1>Top Losers</h1>
-    <table border="1">
+<h1>Top Losers</h1>
+<table>
+    <thead>
         <tr>
             <th>Date</th>
             <th>Ticker</th>
             <th>Price Change Percentage</th>
         </tr>
-        {% for loser in top_losers %}
+    </thead>
+    <tbody>
+        {% for entry in top_losers %}
         <tr>
-            <td>{{ loser.date }}</td>
-            <td>{{ loser.ticker }}</td>
-            <td>{{ loser.price_change_percentage }}%</td>
+            <td>{{ entry.date }}</td>
+            <td>{{ entry.ticker }}</td>
+            <td>{{ entry.price_change_percentage }}%</td>
         </tr>
         {% endfor %}
-    </table>
-</body>
-</html>
+    </tbody>
+</table>

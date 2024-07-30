@@ -5,17 +5,44 @@ from datetime import timedelta, date
 from django.http import JsonResponse
 from django.utils import timezone
 from datetime import datetime 
-from myapp.models import DailyClosingPriceReport, PriceChangePercentageReport, TopGainersLosersReport
 from django.db.models import Subquery, OuterRef, FloatField, ExpressionWrapper
 from django.shortcuts import render
 from django.db.models import Avg, Max, Min, F, ExpressionWrapper, FloatField
 from .models import StockPrice
+import calendar
 
 from django.core.files.storage import default_storage
-import json
+from rest_framework import viewsets
 from datetime import datetime, timedelta
 # from .reports import generate_daily_report, generate_weekly_report, generate_monthly_report
 
+from .serializers import StockPriceSerializer
+
+
+class DailyClosingPriceReportView(generics.ListAPIView):
+    queryset = StockPrice.objects.all().order_by('date')
+    serializer_class = StockPriceSerializer
+
+class PriceChangePercentageReportView(generics.ListAPIView):
+    queryset = StockPrice.objects.all().order_by('-price_change_percentage')
+    serializer_class = StockPriceSerializer
+
+class TopGainersLosersReportView(generics.ListAPIView):
+    serializer_class = StockPriceSerializer
+
+    def get_queryset(self):
+        is_gainer_str = self.request.query_params.get('is_gainer')
+        
+        if is_gainer_str is not None:
+            # Convert the string to a boolean
+            is_gainer = is_gainer_str.lower() in ['true', '1', 't', 'y', 'yes']
+            return StockPrice.objects.filter(is_gainer=is_gainer).order_by('-price_change_percentage')
+        
+        return StockPrice.objects.all()
+
+class StockPriceViewSet(viewsets.ModelViewSet):
+    queryset = StockPrice.objects.all()
+    serializer_class = StockPriceSerializer
 
 class StockListView(generics.ListCreateAPIView):
     queryset = StockPrice.objects.all()
@@ -28,25 +55,28 @@ class StockDetailView(generics.RetrieveUpdateDestroyAPIView):
 # views.py
 
 from django.shortcuts import render
-from .models import DailyClosingPriceReport, PriceChangePercentageReport, TopGainersLosersReport
+from .models import StockPrice
+
 
 def daily_closing_price_report(request):
-    data = DailyClosingPriceReport.objects.all().order_by('date')
+    data = StockPrice.objects.all().order_by('date')
     return render(request, 'reports/daily_closing_price.html', {'data': data})
 
 def price_change_percentage_report(request):
-    data = PriceChangePercentageReport.objects.all().order_by('-price_change_percentage')
+    data = StockPrice.objects.exclude(price_change_percentage__isnull=True).order_by('-price_change_percentage')
     return render(request, 'reports/price_change_percentage.html', {'data': data})
 
 def top_gainers_losers_report(request):
-    gainers = TopGainersLosersReport.objects.filter(is_gainer=True).order_by('-price_change_percentage')
-    losers = TopGainersLosersReport.objects.filter(is_gainer=False).order_by('price_change_percentage')
+    gainers = StockPrice.objects.filter(is_gainer=True).order_by('-price_change_percentage')
+    losers = StockPrice.objects.filter(is_loser=True).order_by('price_change_percentage')
     
     context = {
         'top_gainers': gainers,
         'top_losers': losers
     }
     return render(request, 'reports/top_gainers_losers.html', context)
+
+
 
 # def daily_closing_price_report(request):
 #     data = StockPrice.objects.values('date', 'ticker').annotate(

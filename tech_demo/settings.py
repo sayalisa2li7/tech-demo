@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_celery_beat',
     'django_extensions',
+    'corsheaders',
 ]
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
@@ -179,18 +180,18 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'myapp.tasks.fetch_stock_data',
         'schedule': crontab(hour=0, minute=0),
     },
-    'generate-daily-closing-price-report-every-midnight': {
-        'task': 'myapp.tasks.generate_daily_closing_price_report',
-        'schedule': crontab(hour=0, minute=0),  # Midnight
-    },
-    'generate-price-change-percentage-report-every-midnight': {
-        'task': 'myapp.tasks.generate_price_change_percentage_report',
-        'schedule': crontab(hour=0, minute=0),  # Midnight
-    },
-    'generate-top-gainers-losers-report-every-midnight': {
-        'task': 'myapp.tasks.calculate_top_gainers_losers',
-        'schedule': crontab(hour=0, minute=0),  # Midnight
-    },
+    # 'generate-daily-closing-price-report-every-midnight': {
+    #     'task': 'myapp.tasks.generate_daily_closing_price_report',
+    #     'schedule': crontab(hour=0, minute=0),  # Midnight
+    # },
+    # 'generate-price-change-percentage-report-every-midnight': {
+    #     'task': 'myapp.tasks.generate_price_change_percentage_report',
+    #     'schedule': crontab(hour=0, minute=0),  # Midnight
+    # },
+    # 'generate-top-gainers-losers-report-every-midnight': {
+    #     'task': 'myapp.tasks.calculate_top_gainers_losers',
+    #     'schedule': crontab(hour=0, minute=0),  # Midnight
+    # },
 }
 
 # Add this at the bottom of your settings file

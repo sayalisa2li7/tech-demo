@@ -1,26 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Price Change Percentage Report</title>
-</head>
-<body>
-    <h1>Price Change Percentage Report</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Ticker</th>
-                <th>Price Change Percentage</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in data %}
-            <tr>
-                <td>{{ item.ticker }}</td>
-                <td>{{ item.price_change_percentage|floatformat:2 }}%</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+<h1>Price Change Percentage</h1>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Ticker</th>
+            <th>Price Change Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in data %}
+        <tr>
+            <td>{{ entry.date }}</td>
+            <td>{{ entry.ticker }}</td>
+            <td>{{ entry.price_change_percentage }}%</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
