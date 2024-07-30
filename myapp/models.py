@@ -14,18 +14,37 @@ class StockPrice(models.Model):
         ordering = ['-date']
 
 
-# from django.db import models
+class DailyClosingPriceReport(models.Model):
+    date = models.DateField()
+    ticker = models.CharField(max_length=10)
+    closing_price = models.FloatField()
 
-# # myapp/models.py
+    def __str__(self):
+        return f"{self.ticker} - {self.date} - {self.closing_price}"
 
-# class StockPriceData(models.Model):
-#     date = models.DateField()
-#     open = models.FloatField(null=True)
-#     high = models.FloatField(null=True)
-#     low = models.FloatField(null=True)
-#     close = models.FloatField(null=True)
-#     volume = models.BigIntegerField(null=True)
-#     ticker = models.CharField(max_length=10)
+class PriceChangePercentageReport(models.Model):
+    ticker = models.CharField(max_length=10)
+    first_close = models.FloatField()
+    last_close = models.FloatField()
+    price_change_percentage = models.FloatField()
 
-#     class Meta:
-#         db_table = 'stock_prices_data'
+    def __str__(self):
+        return f"{self.ticker} - {self.price_change_percentage}%"
+
+class TopGainersLosersReport(models.Model):
+    date = models.DateField()
+    ticker = models.CharField(max_length=10)
+    price_change_percentage = models.FloatField()
+    is_gainer = models.BooleanField(null=True)
+
+    class Meta:
+        verbose_name = 'Top Gainers/Losers Report'
+        verbose_name_plural = 'Top Gainers/Losers Reports'
+        indexes = [
+            models.Index(fields=['date']),
+            models.Index(fields=['ticker']),
+            models.Index(fields=['is_gainer']),
+        ]
+
+    def __str__(self):
+        return f"{'Gainer' if self.is_gainer else 'Loser'} - {self.ticker} on {self.date}"

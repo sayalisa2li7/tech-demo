@@ -179,19 +179,18 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'myapp.tasks.fetch_stock_data',
         'schedule': crontab(hour=0, minute=0),
     },
-    # 'generate-daily-report': {
-    #     'task': 'myapp.tasks.daily_report_task',
-    #     'schedule': crontab(hour=0, minute=0),
-    # },
-    # 'generate-weekly-report': {
-    #     'task': 'myapp.tasks.weekly_report_task',
-    #     'schedule': crontab(hour=0, minute=0, day_of_week='monday'),
-    # },
-    # 'generate-monthly-report': {
-    #     'task': 'myapp.tasks.monthly_report_task',
-    #     'schedule': crontab(hour=0, minute=0, day_of_month='1'),
-    # },
-    # Add other periodic tasks here
+    'generate-daily-closing-price-report-every-midnight': {
+        'task': 'myapp.tasks.generate_daily_closing_price_report',
+        'schedule': crontab(hour=0, minute=0),  # Midnight
+    },
+    'generate-price-change-percentage-report-every-midnight': {
+        'task': 'myapp.tasks.generate_price_change_percentage_report',
+        'schedule': crontab(hour=0, minute=0),  # Midnight
+    },
+    'generate-top-gainers-losers-report-every-midnight': {
+        'task': 'myapp.tasks.calculate_top_gainers_losers',
+        'schedule': crontab(hour=0, minute=0),  # Midnight
+    },
 }
 
 # Add this at the bottom of your settings file
