@@ -55,8 +55,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'tech_demo.urls'
 
 TEMPLATES = [
@@ -179,6 +180,10 @@ CELERY_BEAT_SCHEDULE = {
     'fetch-stock-data': {
         'task': 'myapp.tasks.fetch_stock_data',
         'schedule': crontab(hour=0, minute=0),
+    },
+    'generate-daily-report': {
+        'task': 'myapp.tasks.generate_daily_report',
+        'schedule': crontab(hour=0, minute=0),  # Daily at midnight
     },
     # 'generate-daily-closing-price-report-every-midnight': {
     #     'task': 'myapp.tasks.generate_daily_closing_price_report',

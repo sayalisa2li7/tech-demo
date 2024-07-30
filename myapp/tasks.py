@@ -9,6 +9,11 @@ import json
 from celery import shared_task
 import yfinance as yf
 from myapp.models import StockPrice
+from django.core.management import call_command
+
+@shared_task
+def generate_daily_report():
+    call_command('generate_daily_report')
 
 @shared_task
 def fetch_stock_data():

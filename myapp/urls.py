@@ -19,4 +19,5 @@ urlpatterns = [
     path('daily-closing-price/', DailyClosingPriceReportView.as_view(), name='daily_closing_price_report'),
     path('price-change-percentage/', PriceChangePercentageReportView.as_view(), name='price_change_percentage_report'),
     path('top-gainers-losers/', TopGainersLosersReportView.as_view(), name='top_gainers_losers_report'),
+    path('daily-report/', views.daily_report, name='daily_report'),
 ]
