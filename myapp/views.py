@@ -17,6 +17,22 @@ from datetime import datetime, timedelta
 # from .reports import generate_daily_report, generate_weekly_report, generate_monthly_report
 import pandas as pd
 from .serializers import StockPriceSerializer
+from prometheus_client import CollectorRegistry, Gauge, generate_latest
+from django.http import HttpResponse
+
+
+def metrics(request):
+    registry = CollectorRegistry()
+    gauge = Gauge('stock_price_change', 'Change in stock price', ['ticker'], registry=registry)
+
+    # Example logic to update gauge with stock price changes
+    for stock in StockPrice.objects.all():
+        # Assuming price_change_percentage is a field in your model
+        gauge.labels(ticker=stock.ticker).set(stock.price_change_percentage)
+
+    data = generate_latest(registry)
+    return HttpResponse(data, content_type='text/plain')
+
 
 def daily_report(request):
     today = datetime.today().date()

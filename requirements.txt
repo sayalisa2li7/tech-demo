@@ -15,3 +15,5 @@ django-extensions
 # flower
 yfinance
 django-cors-headers
+prometheus_client
+django-prometheus

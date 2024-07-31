@@ -22,4 +22,5 @@ urlpatterns = [
     path('daily-report/', views.daily_report, name='daily_report'),
     path('weekly-report/', views.weekly_report, name='weekly_report'),
     path('monthly-report/', views.monthly_report, name='monthly_report'),
+    path('metrics/', views.monthly_report, name='metrics'),
 ]

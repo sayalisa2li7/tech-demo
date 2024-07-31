@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_extensions',
     'corsheaders',
+    'django_prometheus',
 ]
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
@@ -56,6 +57,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 ROOT_URLCONF = 'tech_demo.urls'
@@ -140,30 +143,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
 
-# myproject/settings.py
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'stock_data',
-#         'USER': 'sayali97',
-#         'PASSWORD': 'Sugandha1274*',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
-
-# Celery settings
-# backend/stock_market_system/settings.py
-
-# Celery settings
 CELERY_BROKER_URL = 'redis://redis:6379/0'
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
@@ -173,10 +156,6 @@ CELERY_TIMEZONE = 'UTC'
 
 # Celery Beat schedule
 CELERY_BEAT_SCHEDULE = {
-    # 'generate-reports-daily': {
-    #     'task': 'tech_demo.tasks.generate_reports_task',
-    #     'schedule': crontab(hour=0, minute=0),  # Every day at midnight
-    # },
     'fetch-stock-data': {
         'task': 'myapp.tasks.fetch_stock_data',
         'schedule': crontab(hour=0, minute=0),
@@ -185,18 +164,6 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'myapp.tasks.generate_daily_report',
         'schedule': crontab(hour=0, minute=0),  # Daily at midnight
     },
-    # 'generate-daily-closing-price-report-every-midnight': {
-    #     'task': 'myapp.tasks.generate_daily_closing_price_report',
-    #     'schedule': crontab(hour=0, minute=0),  # Midnight
-    # },
-    # 'generate-price-change-percentage-report-every-midnight': {
-    #     'task': 'myapp.tasks.generate_price_change_percentage_report',
-    #     'schedule': crontab(hour=0, minute=0),  # Midnight
-    # },
-    # 'generate-top-gainers-losers-report-every-midnight': {
-    #     'task': 'myapp.tasks.calculate_top_gainers_losers',
-    #     'schedule': crontab(hour=0, minute=0),  # Midnight
-    # },
 }
 
 # Add this at the bottom of your settings file
