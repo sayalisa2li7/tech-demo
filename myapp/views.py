@@ -54,6 +54,37 @@ def daily_report(request):
     # Return the report as JSON
     return JsonResponse({'report': report_data})
 
+def weekly_report(request):
+    today = datetime.today().date()
+    start_date = today - timedelta(days=7)
+    
+    df = pd.DataFrame(list(StockPrice.objects.filter(date__gte=start_date, date__lte=today).values()))
+    
+    if df.empty:
+        return JsonResponse({'error': 'No data found for the given period.'}, status=404)
+    
+    # Ensure 'close' column is of numeric type, handling conversion errors
+    df['close'] = pd.to_numeric(df['close'], errors='coerce')
+    
+    # Drop rows where 'close' could not be converted to numeric
+    df = df.dropna(subset=['close'])
+    
+    if df.empty:
+        return JsonResponse({'error': 'No valid data found for the given period.'}, status=404)
+    
+    highest = df.loc[df['close'].idxmax()].to_dict()
+    lowest = df.loc[df['close'].idxmin()].to_dict()
+    
+    report_data = {
+        'start_date': str(start_date),
+        'end_date': str(today),
+        'highest': highest,
+        'lowest': lowest,
+    }
+
+    return JsonResponse({'report': report_data})
+
+
 class DailyClosingPriceReportView(generics.ListAPIView):
     queryset = StockPrice.objects.all().order_by('date')
     serializer_class = StockPriceSerializer
