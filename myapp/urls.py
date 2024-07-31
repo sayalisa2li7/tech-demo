@@ -23,4 +23,7 @@ urlpatterns = [
     path('weekly-report/', views.weekly_report, name='weekly_report'),
     path('monthly-report/', views.monthly_report, name='monthly_report'),
     path('metrics/', views.monthly_report, name='metrics'),
+    path('register/', views.register, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
 ]

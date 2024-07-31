@@ -25,7 +25,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('metrics/', metrics_view, name='metrics'),
     path('api/', include('myapp.urls')),
     path('', include('django_prometheus.urls')),
+    # path('api/', include('accounts.urls')),
 ]
