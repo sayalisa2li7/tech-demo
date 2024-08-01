@@ -66,6 +66,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return Response({'message': 'Logged out successfully.'}, status=status.HTTP_200_OK)
+
 def metrics(request):
     registry = CollectorRegistry()
     gauge = Gauge('stock_price_change', 'Change in stock price', ['ticker'], registry=registry)
