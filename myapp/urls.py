@@ -12,9 +12,9 @@ router.register(r'stock-reports', StockPriceViewSet)
 urlpatterns = [
     path('stocks/', StockListView.as_view(), name='stock-list'),
     path('stocks/<int:pk>/', StockDetailView.as_view(), name='stock-detail'),
-    path('reports/daily-closing-price/', views.daily_closing_price_report, name='daily_closing_price_report'),
-    path('reports/price-change-percentage/', views.price_change_percentage_report, name='price_change_percentage_report'),
-    path('reports/top-gainers-losers/', top_gainers_losers_report, name='top_gainers_losers_report'),
+    # path('reports/daily-closing-price/', views.daily_closing_price_report, name='daily_closing_price_report'),
+    # path('reports/price-change-percentage/', views.price_change_percentage_report, name='price_change_percentage_report'),
+    # path('reports/top-gainers-losers/', top_gainers_losers_report, name='top_gainers_losers_report'),
     path('', include(router.urls)), 
     path('daily-closing-price/', DailyClosingPriceReportView.as_view(), name='daily_closing_price_report'),
     path('price-change-percentage/', PriceChangePercentageReportView.as_view(), name='price_change_percentage_report'),
@@ -26,4 +26,5 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
+    path('user-status/', views.user_status, name='user-status'),
 ]

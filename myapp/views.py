@@ -10,7 +10,7 @@ from django.shortcuts import render
 from django.db.models import Avg, Max, Min, F, ExpressionWrapper, FloatField
 from .models import StockPrice
 import calendar
-
+from django.utils.timezone import now
 from django.core.files.storage import default_storage
 from rest_framework import viewsets
 from datetime import datetime, timedelta
@@ -22,9 +22,18 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth.decorators import login_required
 from rest_framework import status
 from .serializers import UserSerializer
+
+# @login_required
+def user_status(request):
+    user = request.user
+    return JsonResponse({
+        'username': user.username,
+        'is_authenticated': user.is_authenticated
+    })
 
 @api_view(['POST'])
 def register(request):
@@ -174,6 +183,26 @@ class DailyClosingPriceReportView(generics.ListAPIView):
 class PriceChangePercentageReportView(generics.ListAPIView):
     queryset = StockPrice.objects.all().order_by('-price_change_percentage')
     serializer_class = StockPriceSerializer
+# class PriceChangePercentageReportView(generics.ListAPIView):
+#     serializer_class = StockPriceSerializer
+
+#     def get_queryset(self):
+#         period = self.request.query_params.get('period', 'daily')  # Default to 'daily'
+#         today = timezone.now().date()
+
+#         if period == 'daily':
+#             return StockPrice.objects.filter(date=today).order_by('-price_change_percentage')
+#         elif period == 'weekly':
+#             start_of_week = today - timezone.timedelta(days=today.weekday())
+#             return StockPrice.objects.filter(date__gte=start_of_week).order_by('-price_change_percentage')
+#         elif period == 'monthly':
+#             start_of_month = today.replace(day=1)
+#             return StockPrice.objects.filter(date__gte=start_of_month).order_by('-price_change_percentage')
+#         elif period == 'yearly':
+#             start_of_year = today.replace(month=1, day=1)
+#             return StockPrice.objects.filter(date__gte=start_of_year).order_by('-price_change_percentage')
+#         else:
+#             return StockPrice.objects.none()   
 
 class TopGainersLosersReportView(generics.ListAPIView):
     serializer_class = StockPriceSerializer
@@ -187,6 +216,38 @@ class TopGainersLosersReportView(generics.ListAPIView):
             return StockPrice.objects.filter(is_gainer=is_gainer).order_by('-price_change_percentage')
         
         return StockPrice.objects.all()
+
+    
+# class TopGainersLosersReportView(generics.ListAPIView):
+#     serializer_class = StockPriceSerializer
+
+#     def get_queryset(self):
+#         today = now().date()
+#         is_gainer_str = self.request.query_params.get('is_gainer')
+        
+#         if is_gainer_str is not None:
+#             is_gainer = is_gainer_str.lower() in ['true', '1', 't', 'y', 'yes']
+            
+#             # Annotate with price change percentage
+#             stocks = StockPrice.objects.filter(
+#                 date__range=[today - timedelta(days=1), today]
+#             ).annotate(
+#                 price_change_percentage=ExpressionWrapper(
+#                     (F('close') - F('open')) / F('open') * 100,
+#                     output_field=FloatField()
+#                 )
+#             )
+
+#             if is_gainer:
+#                 # Order by price_change_percentage descending and slice the top 5 gainers
+#                 stocks = stocks.filter(price_change_percentage__gt=0).order_by('-price_change_percentage')[:5]
+#             else:
+#                 # Order by price_change_percentage ascending to get the most negative values and slice the top 5 losers
+#                 stocks = stocks.filter(price_change_percentage__lt=0).order_by('price_change_percentage')[:5]
+            
+#             return stocks
+        
+#         return StockPrice.objects.none()
 
 class StockPriceViewSet(viewsets.ModelViewSet):
     queryset = StockPrice.objects.all()
