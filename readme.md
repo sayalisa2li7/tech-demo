@@ -19,3 +19,5 @@ docker-compose exec web python manage.py makemigrations
 docker-compose exec web python manage.py migrate
 
 docker-compose exec db mysql -u sayali97 -p
+
+snhy vpye xzvl dsth

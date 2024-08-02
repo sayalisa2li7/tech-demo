@@ -1,0 +1,19 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'sayalis0910@gmail.com'
+  smtp_auth_username: 'sayalis0910@gmail.com'
+  smtp_auth_password: 'snhyvpyexzvldsth'
+  smtp_require_tls: true  # Enable TLS (STARTTLS for port 587)
+
+receivers:
+  - name: 'email_notifications'
+    email_configs:
+      - to: 'nishantddubey4@gmail.com'
+        send_resolved: true
+
+route:
+  receiver: 'email_notifications'
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 24h
