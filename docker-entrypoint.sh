@@ -36,8 +36,8 @@ celery -A tech_demo worker --loglevel=info &
 echo "Starting Celery beat..."
 celery -A tech_demo beat --loglevel=info &
 
-# echo "Starting Celery flower..."
-# celery -A tech_demo flower --port=5555 &
+echo "Starting Celery flower..."
+celery -A tech_demo flower --port=5555 &
 
 # Keep the container running
 tail -f /dev/null

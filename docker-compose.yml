@@ -56,9 +56,27 @@ services:
     command: celery -A tech_demo beat --loglevel=info
     volumes:
       - .:/app
+      - celery_beat_data:/app/celery_beat_data
     depends_on:
       - web
       - redis
+    environment:
+      - DJANGO_SETTINGS_MODULE=tech_demo.settings
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A tech_demo flower --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - db
+      - celery_worker
+      - celery_beat
     environment:
       - DJANGO_SETTINGS_MODULE=tech_demo.settings
       - CELERY_BROKER_URL=redis://redis:6379/0
@@ -83,22 +101,6 @@ services:
       - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
-
-  # flower:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command: celery -A tech_demo flower --port=5555
-  #   ports:
-  #     - "5555:5555"
-  #   depends_on:
-  #     - redis
-  #     - db
-  #     - celery_worker
-  #   environment:
-  #     - DJANGO_SETTINGS_MODULE=tech_demo.settings
-  #     - CELERY_BROKER_URL=redis://redis:6379/0
-  #     - CELERY_RESULT_BACKEND=redis://redis:6379/0
 
 volumes:
   mysql_data:
