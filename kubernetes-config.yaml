@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: sayalisa2li7/backend_techdemo:1.0
+        image: sayalisa2li7/backend_techdemo:1.4
         ports:
         - containerPort: 8000
         env:
@@ -164,7 +164,7 @@ spec:
     spec:
       containers:
       - name: celery-worker
-        image: sayalisa2li7/backend_techdemo:1.0
+        image: sayalisa2li7/backend_techdemo:1.4
         command: ["celery", "-A", "tech_demo", "worker", "--loglevel=info"]
         env:
         - name: DJANGO_SETTINGS_MODULE
@@ -190,7 +190,7 @@ spec:
     spec:
       containers:
       - name: celery-beat
-        image: sayalisa2li7/backend_techdemo:1.0
+        image: sayalisa2li7/backend_techdemo:1.4
         command: ["celery", "-A", "tech_demo", "beat", "--loglevel=info"]
         env:
         - name: DJANGO_SETTINGS_MODULE
@@ -234,7 +234,7 @@ spec:
     spec:
       containers:
       - name: flower
-        image: sayalisa2li7/backend_techdemo:1.0
+        image: sayalisa2li7/backend_techdemo:1.4
         command: ["celery", "-A", "tech_demo", "flower", "--port=5555"]
         ports:
         - containerPort: 5555
