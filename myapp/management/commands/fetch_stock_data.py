@@ -3,7 +3,6 @@
 from django.core.management.base import BaseCommand
 import yfinance as yf
 from myapp.models import StockPrice
-from django.utils.dateparse import parse_date
 
 class Command(BaseCommand):
     help = 'Fetch stock data for a predefined list of tickers and store it in the database'

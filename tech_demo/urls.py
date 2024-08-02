@@ -17,15 +17,9 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-# myapp/urls.py
-
-# from django.urls import path
-# # from myapp.metrics import metrics_view
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('myapp.urls')),
     path('', include('django_prometheus.urls')),
-    # path('api/', include('accounts.urls')),
 ]

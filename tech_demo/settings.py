@@ -81,22 +81,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'tech_demo.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         # 'ENGINE': 'django.db.backends.sqlite3',
-#         # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'stock_data',
-#         'USER': 'sayali97',
-#         'PASSWORD': 'Sugandha1274*',
-#         'HOST': 'db',
-#         'PORT': '3308',
-#     }
-# }
 import os
 
 DATABASES = {
@@ -159,10 +143,6 @@ CELERY_BEAT_SCHEDULE = {
     'fetch-stock-data': {
         'task': 'myapp.tasks.fetch_stock_data',
         'schedule': crontab(hour=0, minute=0),
-    },
-    'generate-daily-report': {
-        'task': 'myapp.tasks.generate_daily_report',
-        'schedule': crontab(hour=0, minute=0),  # Daily at midnight
     },
     'update-metrics-every-minute': {
         'task': 'myapp.tasks.update_metrics_task',

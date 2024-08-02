@@ -12,7 +12,7 @@ mysqlclient
 redis>=3.5
 gunicorn>=20.0.4
 django-extensions
-# flower
+flower
 yfinance
 django-cors-headers
 prometheus_client

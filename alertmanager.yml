@@ -3,7 +3,7 @@ global:
   smtp_from: 'sayalis0910@gmail.com'
   smtp_auth_username: 'sayalis0910@gmail.com'
   smtp_auth_password: 'snhyvpyexzvldsth'
-  smtp_require_tls: true  # Enable TLS (STARTTLS for port 587)
+  smtp_require_tls: true
 
 receivers:
   - name: 'email_notifications'

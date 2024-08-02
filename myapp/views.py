@@ -1,20 +1,12 @@
 from rest_framework import generics
 from .models import StockPrice
 from .serializers import StockPriceSerializer
-from datetime import timedelta, date
+from datetime import timedelta
 from django.http import JsonResponse
-from django.utils import timezone
 from datetime import datetime 
-from django.db.models import Subquery, OuterRef, FloatField, ExpressionWrapper
-from django.shortcuts import render
-from django.db.models import Avg, Max, Min, F, ExpressionWrapper, FloatField
 from .models import StockPrice
-import calendar
-from django.utils.timezone import now
-from django.core.files.storage import default_storage
 from rest_framework import viewsets
 from datetime import datetime, timedelta
-# from .reports import generate_daily_report, generate_weekly_report, generate_monthly_report
 import pandas as pd
 from .serializers import StockPriceSerializer
 from prometheus_client import CollectorRegistry, Gauge, generate_latest
@@ -22,14 +14,12 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from django.contrib.auth.decorators import login_required
+from rest_framework.decorators import api_view
 from rest_framework import status
 from .serializers import UserSerializer
 from django.http import HttpResponse
 from prometheus_client import CollectorRegistry, Gauge, generate_latest
 from .models import StockPrice
-import prometheus_client
 
 def stock_price_metrics(request):
     registry = CollectorRegistry()
@@ -49,15 +39,6 @@ def stock_price_metrics(request):
     metrics = generate_latest(registry).decode('utf-8')
     
     return HttpResponse(metrics, content_type='text/plain; version=0.0.4; charset=utf-8')
-
-
-# @login_required
-def user_status(request):
-    user = request.user
-    return JsonResponse({
-        'username': user.username,
-        'is_authenticated': user.is_authenticated
-    })
 
 @api_view(['POST'])
 def register(request):
@@ -90,19 +71,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return Response({'message': 'Logged out successfully.'}, status=status.HTTP_200_OK)
-
-def metrics(request):
-    registry = CollectorRegistry()
-    gauge = Gauge('stock_price_change', 'Change in stock price', ['ticker'], registry=registry)
-
-    # Example logic to update gauge with stock price changes
-    for stock in StockPrice.objects.all():
-        # Assuming price_change_percentage is a field in your model
-        gauge.labels(ticker=stock.ticker).set(stock.price_change_percentage)
-
-    data = generate_latest(registry)
-    return HttpResponse(data, content_type='text/plain')
-
 
 def daily_report(request):
     today = datetime.today().date()
@@ -233,27 +201,3 @@ class StockListView(generics.ListCreateAPIView):
 class StockDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = StockPrice.objects.all()
     serializer_class = StockPriceSerializer
-
-# views.py
-
-from django.shortcuts import render
-from .models import StockPrice
-
-
-def daily_closing_price_report(request):
-    data = StockPrice.objects.all().order_by('date')
-    return render(request, 'reports/daily_closing_price.html', {'data': data})
-
-def price_change_percentage_report(request):
-    data = StockPrice.objects.exclude(price_change_percentage__isnull=True).order_by('-price_change_percentage')
-    return render(request, 'reports/price_change_percentage.html', {'data': data})
-
-def top_gainers_losers_report(request):
-    gainers = StockPrice.objects.filter(is_gainer=True).order_by('-price_change_percentage')
-    losers = StockPrice.objects.filter(is_loser=True).order_by('price_change_percentage')
-    
-    context = {
-        'top_gainers': gainers,
-        'top_losers': losers
-    }
-    return render(request, 'reports/top_gainers_losers.html', context)
