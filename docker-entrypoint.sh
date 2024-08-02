@@ -20,6 +20,10 @@ python manage.py migrate
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
+# Specifically migrate the django_celery_beat app to set up periodic tasks
+echo "Applying migrations for django_celery_beat..."
+python manage.py migrate django_celery_beat
+
 # Start Gunicorn processes
 echo "Starting Gunicorn..."
 gunicorn tech_demo.wsgi:application --bind 0.0.0.0:8000 --workers 3 &

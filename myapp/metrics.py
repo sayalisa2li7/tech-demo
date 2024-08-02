@@ -1,13 +1,19 @@
 # myapp/metrics.py
 
-from prometheus_client import Gauge, generate_latest
-from django.http import HttpResponse
+from prometheus_client import Gauge
+from .models import StockPrice
+from datetime import datetime, timedelta
 
-# Define your metrics
-stock_value_change_gauge = Gauge('stock_value_change', 'Stock value change percentage', ['ticker'])
+# Define a custom gauge metric for stock value changes
+stock_value_change_gauge = Gauge('stock_value_change_percentage', 'Percentage change in stock value', ['ticker'])
 
-def metrics_view(request):
-    # Example: Set the value for a specific stock ticker
-    stock_value_change_gauge.labels(ticker='AAPL').set(1.5)  # Replace with actual logic to fetch stock changes
+def update_stock_metrics():
+    """Function to update the custom metrics."""
+    stocks = StockPrice.objects.filter(date=datetime.today() - timedelta(days=1))  # Example filter
+    for stock in stocks:
+        try:
+            percentage_change = (stock.close - stock.open) / stock.open * 100
+            stock_value_change_gauge.labels(stock.ticker).set(percentage_change)
+        except ZeroDivisionError:
+            continue  # Handle cases where the stock open price is zero
 
-    return HttpResponse(generate_latest(), content_type='text/plain')

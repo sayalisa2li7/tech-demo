@@ -164,6 +164,10 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'myapp.tasks.generate_daily_report',
         'schedule': crontab(hour=0, minute=0),  # Daily at midnight
     },
+    'update-metrics-every-minute': {
+        'task': 'myapp.tasks.update_metrics_task',
+        'schedule': 60.0,  # Run every 60 seconds
+    },
 }
 
 # Add this at the bottom of your settings file

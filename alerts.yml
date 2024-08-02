@@ -1,0 +1,11 @@
+groups:
+  - name: stock_alerts
+    rules:
+      - alert: StockPriceChange
+        expr: stock_price_change_percentage > 5  # Adjust this based on your percentage
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Stock price change alert"
+          description: "The stock price has changed by more than 5%."

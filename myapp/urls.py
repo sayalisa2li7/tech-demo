@@ -27,4 +27,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('user-status/', views.user_status, name='user-status'),
+    path('stock-price-metrics/', views.stock_price_metrics, name='stock_price_metrics'),
 ]
