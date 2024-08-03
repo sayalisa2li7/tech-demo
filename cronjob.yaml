@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: django-cronjob
+spec:
+  schedule: "0 0 * * *"  # This runs the job daily at midnight
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: django
+            image: sayalisa2li7/backend_techdemo:2  # Replace with your Django image
+            command: ["python3", "manage.py", "fetch_stock_data"]  # Replace with your management command
+            env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: tech_demo.settings
+            - name: DATABASE_URL
+              value: mysql://sayali97:Sugandha1274*@db:3306/stock_data
+            - name: CELERY_BROKER_URL
+              value: redis://redis:6379/0
+            - name: CELERY_RESULT_BACKEND
+              value: redis://redis:6379/0
+          restartPolicy: OnFailure
