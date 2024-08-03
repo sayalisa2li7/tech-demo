@@ -34,54 +34,6 @@ services:
     ports:
       - "6379:6379"
 
-  celery_worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: celery -A tech_demo worker --loglevel=info
-    volumes:
-      - .:/app
-    depends_on:
-      - web
-      - redis
-    environment:
-      - DJANGO_SETTINGS_MODULE=tech_demo.settings
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-
-  celery_beat:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: celery -A tech_demo beat --loglevel=info
-    volumes:
-      - .:/app
-      - celery_beat_data:/app/celery_beat_data
-    depends_on:
-      - web
-      - redis
-    environment:
-      - DJANGO_SETTINGS_MODULE=tech_demo.settings
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-
-  flower:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: celery -A tech_demo flower --port=5555
-    ports:
-      - "5555:5555"
-    depends_on:
-      - redis
-      - db
-      - celery_worker
-      - celery_beat
-    environment:
-      - DJANGO_SETTINGS_MODULE=tech_demo.settings
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
-
   prometheus:
     image: prom/prometheus:latest
     ports:
@@ -112,5 +64,4 @@ services:
 
 volumes:
   mysql_data:
-  celery_beat_data:
   grafana_data:

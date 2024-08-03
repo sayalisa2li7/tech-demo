@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-from celery.schedules import crontab
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,13 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'myapp',
     'rest_framework',
-    'django_celery_beat',
     'django_extensions',
     'corsheaders',
     'django_prometheus',
 ]
-
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -131,24 +127,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATIC_URL = '/static/'
 
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC'
-
-# Celery Beat schedule
-CELERY_BEAT_SCHEDULE = {
-    'fetch-stock-data': {
-        'task': 'myapp.tasks.fetch_stock_data',
-        'schedule': crontab(hour=0, minute=0),
-    },
-    'update-metrics-every-minute': {
-        'task': 'myapp.tasks.update_metrics_task',
-        'schedule': 60.0,  # Run every 60 seconds
-    },
-}
 
 # Add this at the bottom of your settings file
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -33,3 +33,13 @@ kubectl delete -f kubernetes-config.yaml
 docker build -t sayalisa2li7/backend_techdemo:1.8 .
 
 docker push sayalisa2li7/backend_techdemo:1.8
+
+kubectl apply -f mysql-client.yaml
+kubectl exec -it mysql-client -- mysql -h db -u sayali97 -p
+
+kubectl apply -f cronjob.yaml
+kubectl get cronjobs
+
+kubectl apply -f test-job.yaml
+kubectl get jobs
+kubectl logs job/test-job
