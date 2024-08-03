@@ -18,3 +18,26 @@ spec:
             - name: DATABASE_URL
               value: mysql://sayali97:Sugandha1274*@db:3306/stock_data
           restartPolicy: OnFailure
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: update-stock-metrics
+spec:
+  schedule: "*/2 * * * *"  # Runs every 2 minutes
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: stock-metrics-updater
+            image: sayalisa2li7/backend_techdemo:2.1  # Replace with the Docker image containing your Django application
+            command: ["python", "manage.py", "update_metrics"]
+            env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: "tech_demo.settings"  # Replace with your Django settings module
+            - name: DATABASE_URL
+              value: mysql://sayali97:Sugandha1274*@db:3306/stock_data
+          restartPolicy: OnFailure
+
