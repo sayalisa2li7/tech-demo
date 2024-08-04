@@ -216,8 +216,8 @@ data:
       - name: stock_alerts
         rules:
           - alert: StockPriceChange
-            expr: stock_price_change_percentage > 0.01
-            for: 10s
+            expr: stock_price_change_percentage > 5
+            for: 5m
             labels:
               severity: critical
             annotations:
