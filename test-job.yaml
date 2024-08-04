@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: django
-        image: sayalisa2li7/backend_techdemo:2.3  # Use your Django image
+        image: sayalisa2li7/backend_techdemo:2.4  # Use your Django image
         command: ["python3", "manage.py", "fetch_stock_data"]  # Your management command
         env:
         - name: DJANGO_SETTINGS_MODULE
