@@ -12,6 +12,8 @@ docker-compose exec web python manage.py fetch_stock_data
 
 docker-compose exec web python manage.py fetch_month_data
 
+docker-compose exec web python manage.py fetch_year_data
+
 curl -X POST http://localhost:8000/api/login/ -H "Content-Type: application/json" -d '{"username": "your_username", "password": "your_password"}'
 
 docker-compose exec web python manage.py makemigrations
