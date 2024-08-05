@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -82,11 +83,11 @@ import os
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv('DB_NAME', 'stock_data'),
-        'USER': os.getenv('DB_USER', 'sayali97'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'Sugandha1274*'),
-        'HOST': os.getenv('DB_HOST', 'db'),
-        'PORT': 3306,
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST':config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT'),
     }
 }
 

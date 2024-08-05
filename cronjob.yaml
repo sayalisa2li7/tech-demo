@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: django
-            image: sayalisa2li7/backend_techdemo:2.1  # Replace with your Django image
+            image: sayalisa2li7/backend_techdemo:2.5  # Replace with your Django image
             command: ["python3", "manage.py", "fetch_stock_data"]  # Replace with your management command
             env:
             - name: DJANGO_SETTINGS_MODULE
@@ -25,14 +25,14 @@ kind: CronJob
 metadata:
   name: update-stock-metrics
 spec:
-  schedule: "*/2 * * * *"  # Runs every 2 minutes
+  schedule: "*/5 * * * *"  # Runs every 2 minutes
   jobTemplate:
     spec:
       template:
         spec:
           containers:
           - name: stock-metrics-updater
-            image: sayalisa2li7/backend_techdemo:2.1  # Replace with the Docker image containing your Django application
+            image: sayalisa2li7/backend_techdemo:2.5  # Replace with the Docker image containing your Django application
             command: ["python", "manage.py", "update_metrics"]
             env:
             - name: DJANGO_SETTINGS_MODULE
