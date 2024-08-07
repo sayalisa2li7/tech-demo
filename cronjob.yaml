@@ -3,7 +3,7 @@ kind: CronJob
 metadata:
   name: django-cronjob
 spec:
-  schedule: "0 7 * * *"  # This runs the job daily at 7am
+  schedule: "30 1 * * *" # This runs the job daily at 7am
   jobTemplate:
     spec:
       template:
@@ -25,7 +25,7 @@ kind: CronJob
 metadata:
   name: update-stock-metrics
 spec:
-  schedule: "*/5 * * * *"  # Runs every 2 minutes
+  schedule: "0 * * * *"  # Runs every hour
   jobTemplate:
     spec:
       template:
