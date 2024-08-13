@@ -32,7 +32,6 @@ RUN apk update \
 
 # Copy the installed Python packages from the builder stage
 COPY --from=builder /install /usr/local
-COPY --from=builder /app/.env /app/.env
 
 # Copy the rest of the application code into the container
 COPY . .
