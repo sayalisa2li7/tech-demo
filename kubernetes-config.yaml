@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: sayalisa2li7/backend_techdemo:2.5
+        image: sayalisa2li7/backend_techdemo:5.5
         ports:
         - containerPort: 8000
         env:

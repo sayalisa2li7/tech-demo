@@ -10,7 +10,7 @@ spec:
         spec:
           containers:
           - name: django
-            image: sayalisa2li7/backend_techdemo:2.5  # Replace with your Django image
+            image: sayalisa2li7/backend_techdemo:5.5  # Replace with your Django image
             command: ["python3", "manage.py", "fetch_stock_data"]  # Replace with your management command
             env:
             - name: DJANGO_SETTINGS_MODULE
@@ -32,7 +32,7 @@ spec:
         spec:
           containers:
           - name: stock-metrics-updater
-            image: sayalisa2li7/backend_techdemo:2.5  # Replace with the Docker image containing your Django application
+            image: sayalisa2li7/backend_techdemo:5.5  # Replace with the Docker image containing your Django application
             command: ["python", "manage.py", "update_metrics"]
             env:
             - name: DJANGO_SETTINGS_MODULE

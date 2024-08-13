@@ -1,37 +1,46 @@
-# Use an official Python runtime as a parent image
-FROM python:3.8-slim
+# Stage 1: Build the dependencies
+FROM python:3.10-alpine as builder
 
 # Set the working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    default-libmysqlclient-dev \
-    pkg-config \
-    && apt-get clean
+# Install system dependencies needed for Python packages
+RUN apk update \
+    && apk add --no-cache \
+        gcc \
+        musl-dev \
+        mariadb-dev \
+        pkgconfig \
+    && pip install --upgrade pip
 
-# # Create a non-root user
-# RUN useradd -ms /bin/sh nonrootuser
-# USER nonrootuser
+# Copy the requirements file into the container
+COPY requirements.txt .
 
-# # Make sure /app/staticfiles is writable by the non-root user
-# RUN chown -R nonrootuser:nonrootuser /app/staticfiles
+# Install Python dependencies
+RUN pip install --prefix=/install -r requirements.txt
 
-# Copy the current directory contents into the container at /app
-COPY . /app/
+# Stage 2: Final image
+FROM python:3.10-alpine
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --upgrade pip && pip install -r requirements.txt
+# Set the working directory
+WORKDIR /app
 
-# Make entrypoint script executable
-COPY --chmod=755 docker-entrypoint.sh /app/docker-entrypoint.sh
+# Install any additional dependencies needed at runtime
+RUN apk update \
+    && apk add --no-cache \
+        mariadb-dev
 
-# Make port 8000 available to the world outside this container
-EXPOSE 8000
+# Copy the installed Python packages from the builder stage
+COPY --from=builder /install /usr/local
 
-# Define environment variable
+# Copy the rest of the application code into the container
+COPY . .
+
+# Set environment variables
 ENV DJANGO_SETTINGS_MODULE=tech_demo.settings
 
-# Run the entrypoint script
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+# Expose port 8000 for Django
+EXPOSE 8000
+
+# Start the Django server
+CMD sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
