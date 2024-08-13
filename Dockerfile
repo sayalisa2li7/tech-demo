@@ -15,6 +15,7 @@ RUN apk update \
 
 # Copy the requirements file into the container
 COPY requirements.txt .
+COPY .env .
 
 # Install Python dependencies
 RUN pip install --prefix=/install -r requirements.txt
@@ -32,6 +33,7 @@ RUN apk update \
 
 # Copy the installed Python packages from the builder stage
 COPY --from=builder /install /usr/local
+COPY --from=builder /app/.env /app/.env
 
 # Copy the rest of the application code into the container
 COPY . .
