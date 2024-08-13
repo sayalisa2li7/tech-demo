@@ -15,7 +15,6 @@ RUN apk update \
 
 # Copy the requirements file into the container
 COPY requirements.txt .
-COPY .env .
 
 # Install Python dependencies
 RUN pip install --prefix=/install -r requirements.txt
