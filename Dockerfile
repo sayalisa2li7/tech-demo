@@ -36,6 +36,9 @@ COPY --from=builder /install /usr/local
 # Copy the rest of the application code into the container
 COPY . .
 
+# Copy the .env file into the container
+COPY .env .env
+
 # Set environment variables
 ENV DJANGO_SETTINGS_MODULE=tech_demo.settings
 
