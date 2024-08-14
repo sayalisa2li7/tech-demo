@@ -46,12 +46,12 @@ jobs:
 
       - name: Update Helm Chart with New Image Tag
         run: |
-          sed -i "s/tag2: .*/tag2: '${{ github.sha }}'/" helm-tech-demo/techdemo/values.yaml
+          sed -i "s/tag2: .*/tag2: '${{ github.sha }}'/" https://github.com/sayalisa2li7/helm-tech-demo/blob/main/techdemo/values.yaml
 
       - name: Commit Updated Helm Chart
         run: |
           git config --local user.email "sayalis0910@gmail.com"
           git config --local user.name "sayali shinde"
-          git add helm-tech-demo/techdemo/values.yaml
+          git add https://github.com/sayalisa2li7/helm-tech-demo/blob/main/techdemo/values.yaml
           git commit -m "Update image tag to ${{ github.sha }}"
           git push
